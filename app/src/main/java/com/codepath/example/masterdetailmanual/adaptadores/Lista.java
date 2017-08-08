@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.codepath.example.masterdetailmanual.ItemsListFragment;
 import com.codepath.example.masterdetailmanual.modelos.Item;
@@ -16,10 +15,11 @@ import java.util.List;
 
 
 public class Lista extends RecyclerView.Adapter<Lista.MyViewHolder>{
-    List<Item> mItems;
-    Context mContext;
 
-    //Variable para la comunicación al fragment
+    private List<Item> mItems;
+    private Context mContext;
+
+    //Variable para la comunicación al fragment que contiene la lista
     ItemsListFragment.OnItemSelectedListener itemClickListener;
 
     public Lista(List<Item> items, Context context, ItemsListFragment.OnItemSelectedListener itemClickListener){
@@ -43,6 +43,7 @@ public class Lista extends RecyclerView.Adapter<Lista.MyViewHolder>{
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Item item = mItems.get(position);
+
         holder.bind(mContext, item, itemClickListener);
 
 
@@ -50,10 +51,13 @@ public class Lista extends RecyclerView.Adapter<Lista.MyViewHolder>{
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView id, titulo;
+        private final TextView id, titulo;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
+            itemView.setClickable(true);
+
             id = (TextView) itemView.findViewById(R.id.tv_id);
             titulo = (TextView) itemView.findViewById(R.id.tv_titulo);
         }
@@ -68,7 +72,7 @@ public class Lista extends RecyclerView.Adapter<Lista.MyViewHolder>{
                 public void onClick(View view) {
 
                     itemClickListener.onItemSelected(item);
-                    Toast.makeText(context, "Click desde el adapter", Toast.LENGTH_SHORT).show();
+
                 }
             });
         }

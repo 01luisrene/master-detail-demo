@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.codepath.example.masterdetailmanual.adaptadores.Lista;
 import com.codepath.example.masterdetailmanual.modelos.Item;
@@ -28,6 +27,7 @@ public class ItemsListFragment extends Fragment {
 	private OnItemSelectedListener listener;
 	Activity activity;
 
+	//Interface asociada a acitividad padre
 	public interface OnItemSelectedListener {
 		public void onItemSelected(Item i);
 	}
@@ -45,14 +45,21 @@ public class ItemsListFragment extends Fragment {
 		}
 
 	}
+
+	//Función llamada cuando el fragment es desasociada de una actividad
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		listener = null;
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Crear arraylist de accesorios de artículo
-        //mItems = Item.getItems();
-        //Item item = getArguments().getBinder("item");
+		if (getArguments() != null) {
+			// Manejo de argumentos
+		}
 	}
 
 	@Override
@@ -76,37 +83,25 @@ public class ItemsListFragment extends Fragment {
 
         Lista mListaAdapter = new Lista(mItems, getContext(), new OnItemSelectedListener() {
             @Override
-            public void onItemSelected(Item i) {
-                listener.onItemSelected(i);
-                Toast.makeText(activity, "Click desde el fragment ItemsListFragment", Toast.LENGTH_SHORT).show();
+            public void onItemSelected(Item item) {
+
+                listener.onItemSelected(item);
+
             }
         });
 
-        /*
-		lvItems.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> adapterView, View item, int position,
-					long rowId) {
-				// Retrieve item based on position
-				Item i = adapterItems.getItem(position);
-				// Fire selected event for item
-				listener.onItemSelected(i);
-			}
-		});
-        */
         mRecyclerView.setAdapter(mListaAdapter);
 
-
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
 		return v;
 	}
-	
+
 	/**
 	 * Función para resaltar el item seleccionado de la lista
 	 */
 	public void setActivateOnItemClick(boolean activateOnItemClick) {
-		// When setting CHOICE_MODE_SINGLE, ListView will automatically
-		// give items the 'activated' state when touched.
-		//lvItems.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
+
+       // mRecyclerView.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
 }
